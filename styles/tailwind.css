@@ -6,20 +6,6 @@
     @apply transition duration-300 text-blue-500 hover:text-blue-700
 }
 
-.linkIcon {
-    width:2rem;
-    cursor:pointer;
-}
-
-.bodyBackground {
-    background: linear-gradient(0deg,#0c0e17, #090b12);
-}
-
-.Footer {
-    @apply fixed w-screen text-gray-700 text-center text-sm;
-    bottom:1rem;
-}
-
 .centerImage {
 	display: block;
     margin: 0 auto;
@@ -27,4 +13,15 @@
 
 #response, #request {
 	@apply bg-dark-200 p-4 rounded shadow;
+}
+
+#resTook, #resSize {
+	@apply flex justify-between px-2 py-1 bg-dark-400 rounded text-neutral-700;
+}
+
+#requestSelectView > p{
+	@apply py-0.5 w-full text-center cursor-pointer mx-1 hover:bg-dark-300 duration-300 rounded;
+}
+#requestSelectView > p[x-selected="true"] {
+	@apply bg-dark-300;
 }

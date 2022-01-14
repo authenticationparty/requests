@@ -9,7 +9,14 @@ import {
 
 import styles from "./tailwind.css";
 export function links() {
-	return [{ rel: 'stylesheet', href: styles }];
+	return [
+		// Tailwind
+		{ rel: 'stylesheet', href: styles },
+		// Rubik Font
+		{ rel: "preconnect", href: "https://fonts.googleapis.com"},
+		{ rel: "preconnect", href: "https://fonts.gstatic.com"},
+		{ rel:"stylesheet", href: "https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;700&display=swap" },
+	];
 }
 
 import type { MetaFunction } from "remix";
@@ -31,7 +38,7 @@ export default function App() {
 			<Meta />
 			<Links />
 		</head>
-		<body>
+		<body style={{fontFamily: "'Rubik', 'Arial'"}}>
 			<Outlet />
 			<ScrollRestoration />
 			<Scripts />
