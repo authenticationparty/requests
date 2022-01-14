@@ -1,4 +1,10 @@
+import BodyPreview from '../components/BodyPreview';
+import {useState} from 'react';
+import HeadersPreview from '~/components/HeadersPreview';
+import QueryPreview from '~/components/QueryPreview';
+
 export default function Index() {
+	const [requestPreview, setRequestPreview] = useState('');
 	return (
 		<div className="w-4/6 mx-auto mt-4 space-y-4">
 			<div className="flex space-x-4">
@@ -10,7 +16,12 @@ export default function Index() {
 					<option>DELETE</option>
 					<option>Custom</option>
 				</select>
-				<input className="bg-dark-200 rounded p-2 w-full" type="text" placeholder="URL" />
+				<input
+					className="bg-dark-200 rounded p-2 w-full"
+					type="text"
+					placeholder="URL"
+					id="urlInput"
+				/>
 				<button className="bg-dark-200 rounded p-2">
 					<img src="/icons/send.png" alt="Send" />
 				</button>
@@ -21,9 +32,32 @@ export default function Index() {
 						id="requestSelectView"
 						className="flex justify-around"
 					>
-						<p x-selected="true">Body</p>
-						<p>Headers</p>
-						<p>Query</p>
+						{(()=>{
+							const previews = ['Body', 'Headers', 'Query'];
+							return previews.map((preview, index)=>{
+								return (
+									<p
+										onClick={()=>setRequestPreview(preview)}
+									>{preview}</p>
+								)
+							});
+						})()}
+					</div>
+
+					<hr className="my-2 border-gray-300" />
+					<div className="">
+						{(()=>{
+							switch(requestPreview as any) {
+								case "Body":
+									return <BodyPreview/>
+								case "Headers":
+									return <HeadersPreview/>
+								case "Query":
+									return <QueryPreview/>
+								default:
+									return <BodyPreview/>
+							}
+						})()}
 					</div>
 				</div>
 				<div id="response">
