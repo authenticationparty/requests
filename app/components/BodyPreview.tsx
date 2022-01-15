@@ -13,6 +13,7 @@ export default function Index() {
 	return (
 		<div>
 			<Select
+				classNamePrefix="react-select"
 				options={options}
 				defaultValue={options[1]}
 				onChange={(data: any)=>setBodyType(data?.value || 'none')}
@@ -39,18 +40,16 @@ import { ClipLoader } from 'react-spinners';
 function JSONType() {
 	const editorRef = useRef<any>(); // editorRef.current.getValue()
 	return (
-		<div>
-			<Editor
-				theme='vs-dark'
-				height="40vh"
-				defaultLanguage="json"
-				defaultValue="{}"
-				loading={<ClipLoader />}
-				onMount={(editor, monaco)=>{
-					editorRef.current = editor; 
-				}}
-			/>
-		</div>
+		<Editor
+			theme='vs-dark'
+			height="40vh"
+			defaultLanguage="json"
+			defaultValue="{}"
+			loading={<ClipLoader />}
+			onMount={(editor)=>{
+				editorRef.current = editor; 
+			}}
+		/>
 	)
 }
 

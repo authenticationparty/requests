@@ -38,7 +38,7 @@ export default function App() {
 			<Meta />
 			<Links />
 		</head>
-		<body style={{fontFamily: "'Rubik', 'Arial'"}}>
+		<body style={{fontFamily: "'Rubik', 'Arial'"}} className="bg-dark-800 text-white">
 			<Outlet />
 			<ScrollRestoration />
 			<Scripts />

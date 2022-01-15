@@ -8,7 +8,7 @@ export default function Index() {
 	return (
 		<div className="w-4/6 mx-auto mt-4 space-y-4">
 			<div className="flex space-x-4">
-				<select className="bg-dark-200 rounded p-2">
+				<select className="bg-dark-700 text-white rounded p-2">
 					<option>GET</option>
 					<option>POST</option>
 					<option>PUT</option>
@@ -22,8 +22,8 @@ export default function Index() {
 					placeholder="URL"
 					id="urlInput"
 				/>
-				<button className="bg-dark-200 rounded p-2">
-					<img src="/icons/send.png" alt="Send" />
+				<button className="bg-dark-500 rounded p-2">
+					<img src="/icons/send.png" style={{filter:'invert(100%)'}} alt="Send" />
 				</button>
 			</div>
 			<div className="grid grid-cols-2 gap-x-4">
