@@ -22,11 +22,8 @@
 	@apply text-gray-400;
 }
 
-#requestSelectView > p{
-	@apply py-0.5 w-full text-center cursor-pointer mx-1 hover:bg-light-300 duration-300 rounded;
-}
-#requestSelectView > p[x-selected="true"] {
-	@apply bg-light-300;
+button[data-buttonactive="true"] {
+	@apply bg-dark-600 text-white;
 }
 
 /* react-select */

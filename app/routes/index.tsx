@@ -1,10 +1,59 @@
 import BodyPreview from '../components/BodyPreview';
-import {useState} from 'react';
+import {useState, useRef} from 'react';
 import HeadersPreview from '~/components/HeadersPreview';
 import QueryPreview from '~/components/QueryPreview';
 
+// Response Body
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import shStyle from 'react-syntax-highlighter/dist/cjs/styles/prism/vs-dark';
+function ResponseBody() {
+	return (
+		<SyntaxHighlighter
+			language="json"
+			style={shStyle}
+		>
+			{`{\n\t"auth": "party"\n}`}
+		</SyntaxHighlighter>
+	)
+}
+
+interface FetchOptions {
+	url: string,
+	method?: string;
+	headers?: object,
+	query?: object,
+	body?: string,
+	server?: string,
+}
+
+async function FetchURL() {
+	const Options: FetchOptions = {
+		url: 'https://cpn.ac/',
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		query: {
+			'q': 'query',
+			'p': '1',
+		},
+		body: '{"auth": "party"}',
+		server: 'us-*',
+	}
+
+	const data = await fetch(`/send`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(Options),
+	});
+	console.log(data)
+}
+
 export default function Index() {
-	const [requestPreview, setRequestPreview] = useState('');
+	const [requestPreview, setRequestPreview] = useState('Body');
+	const [responseBody, setResponseBody] = useState('Body');
 	return (
 		<div className="w-4/6 mx-auto mt-4 space-y-4">
 			<div className="flex space-x-4">
@@ -17,12 +66,15 @@ export default function Index() {
 					<option>Custom</option>
 				</select>
 				<input
-					className="bg-dark-200 rounded p-2 w-full"
+					className="bg-dark-700 rounded p-2 w-full"
 					type="text"
 					placeholder="URL"
 					id="urlInput"
 				/>
-				<button className="bg-dark-500 rounded p-2">
+				<button
+					className="bg-dark-500 rounded p-2"
+					onClick={()=>{FetchURL()}}
+				>
 					<img src="/icons/send.png" style={{filter:'invert(100%)'}} alt="Send" />
 				</button>
 			</div>
@@ -30,21 +82,24 @@ export default function Index() {
 				<div id="request">
 					<div
 						id="requestSelectView"
-						className="flex justify-around"
+						className="flex justify-around space-x-2"
 					>
 						{(()=>{
 							const previews = ['Body', 'Headers', 'Query'];
-							return previews.map((preview, index)=>{
+							return previews.map((preview)=>{
 								return (
-									<p
+									<button
+										data-buttonactive={preview === requestPreview}
+										className='py-1 w-full text-center cursor-pointer hover:bg-dark-600 duration-300 rounded-lg'
 										onClick={()=>setRequestPreview(preview)}
-									>{preview}</p>
+									>{preview}</button>
 								)
 							});
 						})()}
 					</div>
 
 					<hr className="my-4 border-dark-500" />
+
 					<div className="">
 						{(()=>{
 							switch(requestPreview as any) {
@@ -79,6 +134,29 @@ export default function Index() {
 							</p>
 						</div>
 					</div>
+
+					<hr className="my-4 border-dark-500" />
+
+					<div
+						id="requestSelectView"
+						className="flex justify-around space-x-2 mb-2.5"
+					>
+						{(()=>{
+							const previews = ['Body', 'Headers', 'Timings'];
+							return previews.map((preview)=>{
+								return (
+									<button
+										data-buttonactive={preview === responseBody}
+										className='py-1 w-full text-center cursor-pointer hover:bg-dark-600 duration-300 rounded-lg'
+										onClick={()=>setResponseBody(preview)}
+									>{preview}</button>
+								)
+							});
+						})()}
+					</div>
+					
+
+					<ResponseBody/>
 				</div>
 			</div>
 		</div>
