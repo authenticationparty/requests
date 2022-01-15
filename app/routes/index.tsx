@@ -44,7 +44,7 @@ export default function Index() {
 						})()}
 					</div>
 
-					<hr className="my-2 border-gray-300" />
+					<hr className="my-4 border-dark-500" />
 					<div className="">
 						{(()=>{
 							switch(requestPreview as any) {
@@ -65,7 +65,7 @@ export default function Index() {
 						id="preview"
 						className="flex space-x-2"
 					>
-						<p className="px-2 py-1 bg-green-500 rounded text-white shrink-0">
+						<p className="px-2 py-1 bg-green-600 rounded text-white shrink-0">
 							200 OK
 						</p>
 						<div className="grid grid-cols-2 space-x-2 w-full">
