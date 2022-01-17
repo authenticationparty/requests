@@ -4,8 +4,25 @@ import HeadersPreview from '~/components/HeadersPreview';
 import QueryPreview from '~/components/QueryPreview';
 
 // Response Body
+import Editor from "@monaco-editor/react";
+import { ClipLoader } from 'react-spinners';
 function ResponseBody() {
-	return (<div></div>)
+	const responseRef = useRef<any>(); // editorRef.current.getValue()
+	return (
+		<Editor
+			theme='vs-dark'
+			height="40vh"
+			options={{
+				readOnly: true,
+			}}
+			defaultLanguage="json"
+			defaultValue={`// body will apear here once the request is made`}
+			loading={<ClipLoader />}
+			onMount={(editor)=>{
+				responseRef.current = editor; 
+			}}
+		/>
+	)
 }
 
 interface FetchOptions {
@@ -17,22 +34,23 @@ interface FetchOptions {
 	server?: string,
 }
 
-async function FetchURL() {
+async function FetchURL(
+	url: "https://google.com",
+	method: "GET",
+	headers: {"Content-Type": "application/json"},
+	query: {},
+	body: undefined,
+	server: "us-west-1",
+) {
 	const Options: FetchOptions = {
-		url: 'https://cpn.ac/',
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		query: {
-			'q': 'query',
-			'p': '1',
-		},
-		body: '{"auth": "party"}',
-		server: 'us-*',
+		url: url,
+		method: method || 'GET',
+		headers,
+		query,
+		body,
 	}
 
-	const data = await fetch(`https://aws./usa`, {
+	const data = await fetch(`https://aws.requests.auth.party/${server}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
@@ -43,7 +61,7 @@ async function FetchURL() {
 }
 
 import Select from 'react-select';
-const typeOptions = [
+const methodOptions = [
 	{ value: 'get', label: 'GET' },
 	{ value: 'post', label: 'POST' },
 	{ value: 'put', label: 'PUT' },
@@ -52,32 +70,48 @@ const typeOptions = [
 	{ value: 'custom', label: 'Custom' },
 ]
 
+const proxies = [
+	{ value: 'us-west-1', label: '🇺🇸 US West 1' },
+	{ value: 'eu-west-2', label: '🇬🇧 EU West 2' },
+	{ value: 'sa-east-1', label: '🇧🇷 SA East 1' },
+]
+
 export default function Index() {
 	const [requestPreview, setRequestPreview] = useState('Body');
 	const [responseBody, setResponseBody] = useState('Body');
-	const [requestType, setRequestType] = useState('get');
+	const [method, setMethod] = useState('get');
+	const [proxy, setProxy] = useState('us-west-1');
+	const [url, setUrl] = useState('get');
 	return (
 		<div className="w-4/6 mx-auto mt-8 space-y-4">
 			<div className="flex space-x-4">
 				<Select
 					className="w-2/12"
 					classNamePrefix="react-select"
-					options={typeOptions}
-					defaultValue={typeOptions[1]}
-					onChange={(data: any)=>setRequestType(data?.value || 'none')}
+					options={methodOptions}
+					defaultValue={methodOptions[1]}
+					onChange={(data: any)=>setMethod(data?.value || 'none')}
 				/>
 				<input
 					className="bg-dark-600 rounded p-2 w-full"
 					type="text"
+					onChange={(event)=>setUrl(event.target.value)}
 					placeholder="URL"
 					id="urlInput"
 				/>
 				<button
 					className="bg-dark-500 rounded p-2"
-					onClick={()=>{FetchURL()}}
+					onClick={()=>{FetchURL(url, method, {}, {}, undefined, proxy)}}
 				>
 					<img src="/icons/send.png" style={{filter:'invert(100%)'}} alt="Send" />
 				</button>
+				<Select
+					className="w-4/12"
+					classNamePrefix="react-select"
+					options={proxies}
+					defaultValue={proxies[0]}
+					onChange={(data: any)=>setProxy(data?.value || 'none')}
+				/>
 			</div>
 			<div className="grid grid-cols-2 gap-x-4">
 				<div id="request">
