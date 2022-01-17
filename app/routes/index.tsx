@@ -51,22 +51,32 @@ async function FetchURL() {
 	console.log(data)
 }
 
+import Select from 'react-select';
+const typeOptions = [
+	{ value: 'get', label: 'GET' },
+	{ value: 'post', label: 'POST' },
+	{ value: 'put', label: 'PUT' },
+	{ value: 'patch', label: 'PATCH' },
+	{ value: 'delete', label: 'DELETE' },
+	{ value: 'custom', label: 'Custom' },
+]
+
 export default function Index() {
 	const [requestPreview, setRequestPreview] = useState('Body');
 	const [responseBody, setResponseBody] = useState('Body');
+	const [requestType, setRequestType] = useState('get');
 	return (
-		<div className="w-4/6 mx-auto mt-4 space-y-4">
+		<div className="w-4/6 mx-auto mt-8 space-y-4">
 			<div className="flex space-x-4">
-				<select className="bg-dark-700 text-white rounded p-2">
-					<option>GET</option>
-					<option>POST</option>
-					<option>PUT</option>
-					<option>PATCH</option>
-					<option>DELETE</option>
-					<option>Custom</option>
-				</select>
+				<Select
+					className="w-2/12"
+					classNamePrefix="react-select"
+					options={typeOptions}
+					defaultValue={typeOptions[1]}
+					onChange={(data: any)=>setRequestType(data?.value || 'none')}
+				/>
 				<input
-					className="bg-dark-700 rounded p-2 w-full"
+					className="bg-dark-600 rounded p-2 w-full"
 					type="text"
 					placeholder="URL"
 					id="urlInput"
