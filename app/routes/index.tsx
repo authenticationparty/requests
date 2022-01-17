@@ -4,17 +4,8 @@ import HeadersPreview from '~/components/HeadersPreview';
 import QueryPreview from '~/components/QueryPreview';
 
 // Response Body
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import shStyle from 'react-syntax-highlighter/dist/cjs/styles/prism/vs-dark';
 function ResponseBody() {
-	return (
-		<SyntaxHighlighter
-			language="json"
-			style={shStyle}
-		>
-			{`{\n\t"auth": "party"\n}`}
-		</SyntaxHighlighter>
-	)
+	return (<div></div>)
 }
 
 interface FetchOptions {
@@ -41,7 +32,7 @@ async function FetchURL() {
 		server: 'us-*',
 	}
 
-	const data = await fetch(`/send`, {
+	const data = await fetch(`https://aws./usa`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
