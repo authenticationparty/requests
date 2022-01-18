@@ -81,7 +81,7 @@ export default function Index() {
 	const [responseBody, setResponseBody] = useState('Body');
 	const [method, setMethod] = useState('get');
 	const [proxy, setProxy] = useState('us-west-1');
-	const [url, setUrl] = useState('get');
+	const [url, setUrl] = useState('https://myexternalip.com/json');
 	return (
 		<div className="w-4/6 mx-auto mt-8 space-y-4">
 			<div className="flex space-x-4">
