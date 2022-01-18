@@ -16,36 +16,6 @@ interface FetchOptions {
 	server?: string,
 }
 
-async function FetchURL(
-	url: "https://google.com",
-	method: "GET",
-	headers: {"Content-Type": "application/json"},
-	query: {},
-	body: undefined,
-	server: "us-west-1",
-	responseRef: any,
-) {
-	const Options: FetchOptions = {
-		url: url,
-		method: method || 'GET',
-		headers,
-		query,
-		body,
-	}
-
-	const response = await fetch(`https://aws.requests.auth.party/${server}`, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(Options),
-	});
-	console.log(response)
-
-	const data = await response.json();
-	responseRef.current.setValue(data.data.body);
-}
-
 import Select from 'react-select';
 const methodOptions = [
 	{ value: 'get', label: 'GET' },
@@ -64,11 +34,34 @@ const proxies = [
 
 export default function Index() {
 	const [requestPreview, setRequestPreview] = useState('Body');
-	const [responseBody, setResponseBody] = useState('Body');
+	const [responsePreview, setResponsePreview] = useState('Body');
 	const [method, setMethod] = useState('get');
 	const [proxy, setProxy] = useState('us-west-1');
 	const [url, setUrl] = useState('https://myexternalip.com/json');
-	const responseRef = useRef<any>(); // editorRef.current.getValue()
+	const [responseDefaultLanguage, setResponseDefaultLanguage] = useState('json');
+
+	const [responseBody, setResponseBody] = useState('// body will apear here once the request is made');
+
+	async function FetchURL() {
+		const Options: FetchOptions = {
+			url: url,
+			method: method || 'GET',
+		}
+	
+		const response = await fetch(`https://aws.requests.auth.party/${proxy}`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(Options),
+		});
+		console.log(response)
+	
+		const data = await response.json();
+		setResponseDefaultLanguage
+		setResponseBody(data.data.body);
+	}
+
 	return (
 		<div className="w-4/6 mx-auto mt-8 space-y-4">
 			<div className="flex space-x-4">
@@ -88,7 +81,7 @@ export default function Index() {
 				/>
 				<button
 					className="bg-dark-500 rounded p-2"
-					onClick={()=>{FetchURL(url, method, {}, {}, undefined, proxy, responseRef)}}
+					onClick={()=>{FetchURL()}}
 				>
 					<img src="/icons/send.png" style={{filter:'invert(100%)'}} alt="Send" />
 				</button>
@@ -168,9 +161,9 @@ export default function Index() {
 							return previews.map((preview)=>{
 								return (
 									<button
-										data-buttonactive={preview === responseBody}
+										data-buttonactive={preview === responsePreview}
 										className='py-1 w-full text-center cursor-pointer hover:bg-dark-600 duration-300 rounded-lg'
-										onClick={()=>setResponseBody(preview)}
+										onClick={()=>setResponsePreview(preview)}
 									>{preview}</button>
 								)
 							});
@@ -183,12 +176,10 @@ export default function Index() {
 						options={{
 							readOnly: true,
 						}}
-						defaultLanguage="json"
-						defaultValue={`// body will apear here once the request is made`}
+						defaultLanguage={responseDefaultLanguage}
+						value={responseBody}
+						defaultValue={responseBody}
 						loading={<ClipLoader />}
-						onMount={(editor)=>{
-							responseRef.current = editor; 
-						}}
 					/>
 				</div>
 			</div>
