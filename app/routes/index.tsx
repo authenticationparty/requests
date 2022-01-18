@@ -6,24 +6,6 @@ import QueryPreview from '~/components/QueryPreview';
 // Response Body
 import Editor from "@monaco-editor/react";
 import { ClipLoader } from 'react-spinners';
-function ResponseBody() {
-	const responseRef = useRef<any>(); // editorRef.current.getValue()
-	return (
-		<Editor
-			theme='vs-dark'
-			height="40vh"
-			options={{
-				readOnly: true,
-			}}
-			defaultLanguage="json"
-			defaultValue={`// body will apear here once the request is made`}
-			loading={<ClipLoader />}
-			onMount={(editor)=>{
-				responseRef.current = editor; 
-			}}
-		/>
-	)
-}
 
 interface FetchOptions {
 	url: string,
@@ -41,6 +23,7 @@ async function FetchURL(
 	query: {},
 	body: undefined,
 	server: "us-west-1",
+	responseRef: any,
 ) {
 	const Options: FetchOptions = {
 		url: url,
@@ -50,14 +33,17 @@ async function FetchURL(
 		body,
 	}
 
-	const data = await fetch(`https://aws.requests.auth.party/${server}`, {
+	const response = await fetch(`https://aws.requests.auth.party/${server}`, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify(Options),
 	});
-	console.log(data)
+	console.log(response)
+
+	const data = await response.json();
+	responseRef.current.setValue(data.data.body);
 }
 
 import Select from 'react-select';
@@ -82,6 +68,7 @@ export default function Index() {
 	const [method, setMethod] = useState('get');
 	const [proxy, setProxy] = useState('us-west-1');
 	const [url, setUrl] = useState('https://myexternalip.com/json');
+	const responseRef = useRef<any>(); // editorRef.current.getValue()
 	return (
 		<div className="w-4/6 mx-auto mt-8 space-y-4">
 			<div className="flex space-x-4">
@@ -101,7 +88,7 @@ export default function Index() {
 				/>
 				<button
 					className="bg-dark-500 rounded p-2"
-					onClick={()=>{FetchURL(url, method, {}, {}, undefined, proxy)}}
+					onClick={()=>{FetchURL(url, method, {}, {}, undefined, proxy, responseRef)}}
 				>
 					<img src="/icons/send.png" style={{filter:'invert(100%)'}} alt="Send" />
 				</button>
@@ -190,8 +177,19 @@ export default function Index() {
 						})()}
 					</div>
 					
-
-					<ResponseBody/>
+					<Editor
+						theme='vs-dark'
+						height="40vh"
+						options={{
+							readOnly: true,
+						}}
+						defaultLanguage="json"
+						defaultValue={`// body will apear here once the request is made`}
+						loading={<ClipLoader />}
+						onMount={(editor)=>{
+							responseRef.current = editor; 
+						}}
+					/>
 				</div>
 			</div>
 		</div>
