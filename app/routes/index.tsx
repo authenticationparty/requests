@@ -41,7 +41,7 @@ export default function Index() {
 	const [responseDefaultLanguage, setResponseDefaultLanguage] = useState('json');
 
 	const [responseBody, setResponseBody] = useState('// body will apear here once the request is made');
-	const [resTook, setResTook] = useState(0);
+	const [resTook, setResTook] = useState(-1);
 
 	async function FetchURL() {
 		const Options: FetchOptions = {
@@ -71,7 +71,7 @@ export default function Index() {
 					className="w-2/12"
 					classNamePrefix="react-select"
 					options={methodOptions}
-					defaultValue={methodOptions[1]}
+					defaultValue={methodOptions[0]}
 					onChange={(data: any)=>setMethod(data?.value || 'none')}
 				/>
 				<input
@@ -143,7 +143,7 @@ export default function Index() {
 						<div className="grid grid-cols-2 space-x-2 w-full">
 							<p id="resTook">
 								<b>Took</b>
-								<span id="resTookI">{resTook}ms</span>
+								<span id="resTookI">{resTook == -1 ? '-' : `${resTook}ms`}</span>
 							</p>
 							<p id="resSize">
 								<b>Size</b>
