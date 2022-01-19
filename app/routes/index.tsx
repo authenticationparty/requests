@@ -42,6 +42,7 @@ export default function Index() {
 
 	const [responseBody, setResponseBody] = useState('// body will apear here once the request is made');
 	const [resTook, setResTook] = useState(-1);
+	const [resSize, setResSize] = useState(-1);
 
 	async function FetchURL() {
 		const Options: FetchOptions = {
@@ -62,6 +63,7 @@ export default function Index() {
 		setResponseDefaultLanguage
 		setResponseBody(data.data.body);
 		setResTook(data.data.took);
+		setResSize(data.data.body ? data.data.body.length : 0);
 	}
 
 	return (
@@ -147,7 +149,7 @@ export default function Index() {
 							</p>
 							<p id="resSize">
 								<b>Size</b>
-								<span id="resSizeI">958b</span>
+								<span id="resSizeI">{resSize == -1 ? '-' : `${resSize}b`}</span>
 							</p>
 						</div>
 					</div>
