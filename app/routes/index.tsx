@@ -41,6 +41,7 @@ export default function Index() {
 	const [responseDefaultLanguage, setResponseDefaultLanguage] = useState('json');
 
 	const [responseBody, setResponseBody] = useState('// body will apear here once the request is made');
+	const [resTook, setResTook] = useState(0);
 
 	async function FetchURL() {
 		const Options: FetchOptions = {
@@ -60,6 +61,7 @@ export default function Index() {
 		const data = await response.json();
 		setResponseDefaultLanguage
 		setResponseBody(data.data.body);
+		setResTook(data.data.took);
 	}
 
 	return (
@@ -141,7 +143,7 @@ export default function Index() {
 						<div className="grid grid-cols-2 space-x-2 w-full">
 							<p id="resTook">
 								<b>Took</b>
-								<span id="resTookI">391ms</span>
+								<span id="resTookI">{resTook}ms</span>
 							</p>
 							<p id="resSize">
 								<b>Size</b>
