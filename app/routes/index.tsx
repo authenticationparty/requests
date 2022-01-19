@@ -37,7 +37,7 @@ export default function Index() {
 	const [responsePreview, setResponsePreview] = useState('Body');
 	const [method, setMethod] = useState('get');
 	const [proxy, setProxy] = useState('us-west-1');
-	const [url, setUrl] = useState('https://myexternalip.com/json');
+	const [url, setUrl] = useState('https://api64.ipify.org/?format=json');
 	const [responseDefaultLanguage, setResponseDefaultLanguage] = useState('json');
 
 	const [responseBody, setResponseBody] = useState('// body will apear here once the request is made');
