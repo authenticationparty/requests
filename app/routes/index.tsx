@@ -6,7 +6,6 @@ import QueryPreview from '~/components/QueryPreview';
 // Response Body
 import Editor from "@monaco-editor/react";
 import { ClipLoader } from 'react-spinners';
-
 interface FetchOptions {
 	url: string,
 	method?: string;
@@ -32,6 +31,33 @@ const proxies = [
 	{ value: 'sa-east-1', label: '🇧🇷 SA East 1' },
 ]
 
+const doNotCapitalize = ['HTTP', 'URI', 'OK', 'I\'m a teapot'];
+function capitalizeStatusText(statusText: string) {
+	if (doNotCapitalize.includes(statusText)) { return statusText; }
+
+	const builder = [];
+	const words = statusText.split(' ');
+	for (let i = 0; i < words.length; i++) {
+		if (doNotCapitalize.includes(words[i])) builder.push(words[i]);
+		else builder.push(words[i].charAt(0).toUpperCase() + words[i].slice(1));
+	}
+	return builder.join(' ');
+}
+
+function getStatusCodeColor(status: number) {
+	if (status >= 100 && status < 200) {
+		return 'bg-blue-600'
+	} else if (status >= 200 && status < 300) {
+		return 'bg-green-600';
+	} else if (status >= 300 && status < 400) {
+		return 'bg-gray-600';
+	} else if (status >= 400 && status < 500) {
+		return 'bg-red-500';
+	} else {
+		return 'bg-red-500';
+	}
+}
+
 export default function Index() {
 	const [requestPreview, setRequestPreview] = useState('Body');
 	const [responsePreview, setResponsePreview] = useState('Body');
@@ -43,6 +69,8 @@ export default function Index() {
 	const [responseBody, setResponseBody] = useState('// body will apear here once the request is made');
 	const [resTook, setResTook] = useState(-1);
 	const [resSize, setResSize] = useState(-1);
+	const [resStatus, setResStatus] = useState(418);
+	const [resStatusText, setResStatusText] = useState('I\'m a teapot');
 
 	async function FetchURL() {
 		const Options: FetchOptions = {
@@ -64,6 +92,8 @@ export default function Index() {
 		setResponseBody(data.data.body);
 		setResTook(data.data.took);
 		setResSize(data.data.body ? data.data.body.length : 0);
+		setResStatus(data.data.status);
+		setResStatusText(data.data.statusText);
 	}
 
 	return (
@@ -139,10 +169,10 @@ export default function Index() {
 						id="preview"
 						className="flex space-x-2"
 					>
-						<p className="px-2 py-1 bg-green-600 rounded text-white shrink-0">
-							200 OK
-						</p>
-						<div className="grid grid-cols-2 space-x-2 w-full">
+						<div className="grid grid-cols-3 space-x-2 w-full">
+							<p className={"truncate px-2 py-1 rounded text-white shrink-0 " + getStatusCodeColor(resStatus)}>
+								{resStatus} {capitalizeStatusText(resStatusText)}
+							</p>
 							<p id="resTook">
 								<b>Took</b>
 								<span id="resTookI">{resTook == -1 ? '-' : `${resTook}ms`}</span>
