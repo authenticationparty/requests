@@ -59,7 +59,7 @@ function getStatusCodeColor(status: number) {
 }
 
 export default function Index() {
-	const [requestPreview, setRequestPreview] = useState('Body');
+	const [requestPreview, setRequestPreview] = useState('Headers');
 	const [responsePreview, setResponsePreview] = useState('Body');
 	const [method, setMethod] = useState('get');
 	const [proxy, setProxy] = useState('us-west-1');
